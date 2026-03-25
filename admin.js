@@ -114,9 +114,9 @@ function renderAdmin() {
     .map(
       (item) => `
       <tr>
-        <td>${item.name}</td>
-        <td>${peso(item.amountDue)}</td>
-        <td class="${item.paymentStatus === "PAID" ? "status-paid" : "status-due"}">${item.paymentStatus === "PAID" ? getTrans("paid") : getTrans("due")}</td>
+        <td data-label="${getTrans("techName")}">${item.name}</td>
+        <td data-label="${getTrans("amountDue")}">${peso(item.amountDue)}</td>
+        <td data-label="${getTrans("status")}" class="cell-status ${item.paymentStatus === "PAID" ? "status-paid" : "status-due"}">${item.paymentStatus === "PAID" ? getTrans("paid") : getTrans("due")}</td>
       </tr>
     `
     )
@@ -143,12 +143,12 @@ function renderReportsInbox() {
     .map(
       (item) => `
       <tr>
-        <td>${formatDateTime(item.createdAt)}</td>
-        <td>${escapeHtml(item.name)}</td>
-        <td>${escapeHtml(item.contact)}</td>
-        <td>${reportTypeLabel(item.type)}</td>
-        <td>${escapeHtml(item.message)}</td>
-        <td>
+        <td data-label="${getTrans("date")}">${formatDateTime(item.createdAt)}</td>
+        <td data-label="${getTrans("name")}">${escapeHtml(item.name)}</td>
+        <td data-label="${getTrans("contact")}">${escapeHtml(item.contact)}</td>
+        <td data-label="${getTrans("concernType")}">${reportTypeLabel(item.type)}</td>
+        <td data-label="${getTrans("message")}">${escapeHtml(item.message)}</td>
+        <td data-label="${getTrans("status")}" class="cell-status">
           <select class="report-status ${statusClassName(item.status)}" data-report-id="${item.id}">
             <option value="New" ${item.status === "New" ? "selected" : ""}>${getTrans("statusNew")}</option>
             <option value="In Review" ${item.status === "In Review" ? "selected" : ""}>${getTrans("statusInReview")}</option>

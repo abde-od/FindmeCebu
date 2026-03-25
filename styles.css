@@ -803,8 +803,16 @@ table tbody tr:hover {
     padding: 1.5rem 0;
   }
 
+  .admin-header {
+    margin-bottom: 1.1rem;
+  }
+
   .admin-header h1 {
     font-size: 1.8rem;
+  }
+
+  .admin-subtext {
+    font-size: 0.95rem;
   }
 
   .admin-container {
@@ -831,12 +839,61 @@ table tbody tr:hover {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .payments-card table {
-    min-width: 420px;
+  .admin-table {
+    width: 100%;
   }
 
-  .reports-card table {
-    min-width: 760px;
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table tbody,
+  .admin-table tr,
+  .admin-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-table tr {
+    background: #fbfefd;
+    border: 1px solid #e0ebe5;
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .admin-table td {
+    border: none;
+    padding: 0.35rem 0;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+
+  .admin-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--muted);
+    flex: 0 0 42%;
+  }
+
+  .admin-table td.cell-status {
+    align-items: center;
+  }
+
+  .admin-table td.cell-status::before {
+    padding-top: 0;
+  }
+
+  .admin-table .report-status {
+    min-width: 140px;
+    width: auto;
+  }
+
+  .table-wrap {
+    overflow-x: visible;
   }
 
   .report-modal-content {
@@ -863,9 +920,41 @@ table tbody tr:hover {
     padding: 0.8rem;
     font-size: 0.9rem;
   }
+
+  .header-controls {
+    gap: 0.5rem;
+  }
 }
 
 @media (max-width: 520px) {
+  .site-header {
+    gap: 0.5rem;
+    padding: 0.72rem 0.75rem;
+  }
+
+  .brand-text {
+    font-size: 0.95rem;
+  }
+
+  .top-nav {
+    width: 100%;
+    order: 2;
+  }
+
+  .top-nav a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .header-controls {
+    order: 3;
+    width: 100%;
+  }
+
+  .header-controls .outline-btn {
+    min-width: 96px;
+  }
+
   .lang-selector {
     min-width: 112px;
     font-size: 0.84rem;
