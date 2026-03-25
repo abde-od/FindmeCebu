@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ServiceHub Cebu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand" data-i18n="brand">ServiceHub Cebu</div>
+    <nav class="top-nav" aria-label="Primary">
+      <a href="#home" data-i18n="home">Home</a>
+      <a href="#services" data-i18n="services">Services</a>
+      <a href="#technicians" data-i18n="technicians">Technicians</a>
+      <a href="admin.html" data-i18n="admin">Admin</a>
+    </nav>
+    <div class="header-controls">
+      <select id="languageSelector" class="lang-selector" aria-label="Select language">
+        <option value="en">English</option>
+        <option value="tl">Tagalog</option>
+      </select>
+      <button class="outline-btn" type="button" data-i18n="registerTech">Register as Tech</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero section">
+      <div class="hero-content">
+        <p class="kicker" data-i18n="forCebuArea">For Cebu City, Mandaue, and Lapu-Lapu</p>
+        <h1 data-i18n="heroTitle">Trusted AC & Home Services in Cebu</h1>
+        <p class="subtext" data-i18n="heroSubtitle">Book verified technicians for Aircon, Plumbing, and Electrical jobs in minutes.</p>
+        <div class="search-wrap">
+          <input id="searchInput" type="search" data-i18n="searchPlaceholder" placeholder="Search for Aircon Cleaner, Plumber..." aria-label="Search technicians by name or skill">
+          <select id="barangayFilter" aria-label="Filter technicians by barangay">
+            <option value="All" data-i18n="allBarangays">All Barangays</option>
+          </select>
+        </div>
+      </div>
+      <div class="hero-shape" aria-hidden="true"></div>
+    </section>
+
+    <section id="services" class="section services">
+      <h2 data-i18n="serviceCategories">Service Categories</h2>
+      <div class="category-row" id="categoryRow">
+        <button class="category-chip active" data-category="All" type="button" data-i18n="all">All</button>
+        <button class="category-chip" data-category="Aircon" type="button" data-i18n="aircon">Aircon</button>
+        <button class="category-chip" data-category="Plumbing" type="button" data-i18n="plumbing">Plumbing</button>
+        <button class="category-chip" data-category="Electrical" type="button" data-i18n="electrical">Electrical</button>
+      </div>
+    </section>
+
+    <section id="technicians" class="section technicians">
+      <div class="section-heading">
+        <h2 data-i18n="featuredTechnicians">Featured Technicians</h2>
+        <p id="resultCount" class="result-count"></p>
+      </div>
+      <div id="technicianList" class="technician-list"></div>
+
+      <article class="contact-admin-card">
+        <h3 data-i18n="contactAdmin">Contact Admin</h3>
+        <p data-i18n="contactAdminHint">Have a report or suggestion? Send it directly to admin for review.</p>
+        <button id="openReportModal" class="solid-btn" type="button" data-i18n="sendReport">Send Report or Comment</button>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a href="#home" data-i18n="quickLinks">Quick links</a>
+    <a href="#services" data-i18n="services">Categories</a>
+    <a href="#technicians" data-i18n="howItWorks">How it Works</a>
+    <a href="admin.html" data-i18n="admin">Admin</a>
+  </footer>
+
+  <div id="phoneModal" class="modal" aria-hidden="true" role="dialog" aria-label="Technician phone number">
+    <div class="modal-content">
+      <h3 id="modalName"></h3>
+      <p id="modalPhone"></p>
+      <button id="closeModal" class="solid-btn" type="button" data-i18n="close">Close</button>
+    </div>
+  </div>
+
+  <div id="reportModal" class="modal" aria-hidden="true" role="dialog" aria-label="Send report to admin">
+    <div class="modal-content report-modal-content">
+      <h3 data-i18n="reportTitle">Send Report or Comment</h3>
+      <form id="reportForm" class="report-form">
+        <label>
+          <span data-i18n="nameField">Name</span>
+          <input id="reportName" type="text" required>
+        </label>
+        <label>
+          <span data-i18n="contactField">Contact (Email or Phone)</span>
+          <input id="reportContact" type="text" required>
+        </label>
+        <label>
+          <span data-i18n="concernType">Concern Type</span>
+          <select id="reportType" required>
+            <option value="Report Technician" data-i18n="typeReportTech">Report Technician</option>
+            <option value="Service Complaint" data-i18n="typeServiceComplaint">Service Complaint</option>
+            <option value="Suggestion" data-i18n="typeSuggestion">Suggestion</option>
+            <option value="Other" data-i18n="typeOther">Other</option>
+          </select>
+        </label>
+        <label>
+          <span data-i18n="technicianOptional">Technician (Optional)</span>
+          <select id="reportTechId">
+            <option value="" data-i18n="selectTechnician">Select technician</option>
+          </select>
+        </label>
+        <label>
+          <span data-i18n="messageField">Message</span>
+          <textarea id="reportMessage" rows="4" required minlength="10"></textarea>
+        </label>
+        <p id="reportFeedback" class="report-feedback" aria-live="polite"></p>
+        <div class="report-actions">
+          <button id="cancelReport" class="outline-btn" type="button" data-i18n="cancel">Cancel</button>
+          <button class="solid-btn" type="submit" data-i18n="submitReport">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="translations.js"></script>
+  <script src="craftsmen.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
