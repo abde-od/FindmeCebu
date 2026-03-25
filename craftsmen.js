@@ -13,7 +13,7 @@ const craftsmanList = [
     whatsapp: "https://wa.me/639171234567",
     jobsCompleted: 182,
     callsHandled: 34,
-    paymentStatus: "PAID",
+    paymentStatus: "Paid",
     amountDue: 500,
     image: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=800&q=80"
   },
