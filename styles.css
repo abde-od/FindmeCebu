@@ -53,8 +53,23 @@ h3 {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(14, 68, 49, 0.18);
+  flex: 0 0 auto;
+}
+
+.brand-text {
   font-weight: 800;
-  font-size: 1.2rem;
+  font-size: 1.12rem;
+  letter-spacing: 0.01em;
 }
 
 .top-nav {
@@ -292,6 +307,10 @@ h1 {
   font-size: 1.4rem;
 }
 
+.rating-star {
+  color: #f4b400;
+}
+
 .badge {
   display: inline-block;
   font-size: 0.75rem;
@@ -460,6 +479,7 @@ h1 {
 
 .table-wrap {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
@@ -600,6 +620,10 @@ table tbody tr:hover {
   color: var(--ink);
 }
 
+.report-status {
+  min-width: 120px;
+}
+
 .report-form textarea {
   resize: vertical;
 }
@@ -648,21 +672,130 @@ table tbody tr:hover {
 
 @media (max-width: 760px) {
   .site-header {
+    position: static;
     flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 0.8rem 0.9rem;
+  }
+
+  .brand {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-text {
+    font-size: 1.02rem;
   }
 
   .top-nav {
+    order: 2;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.2rem;
+  }
+
+  .top-nav a {
+    white-space: nowrap;
+    padding: 0.35rem 0.65rem;
+    border: 1px solid #d6e5df;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 0.88rem;
+  }
+
+  .header-controls {
     order: 3;
     width: 100%;
     justify-content: space-between;
   }
 
+  .lang-selector,
+  .header-controls .outline-btn {
+    flex: 1 1 0;
+    text-align: center;
+  }
+
+  .section {
+    width: min(100%, 94%);
+    padding: 2.4rem 0 0.8rem;
+  }
+
+  .hero {
+    gap: 1rem;
+    padding-top: 1.4rem;
+  }
+
+  .hero-shape {
+    height: 140px;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 7vw, 2.1rem);
+  }
+
+  .search-wrap input,
+  .search-wrap select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  .category-chip {
+    flex: 1 1 calc(50% - 0.35rem);
+    text-align: center;
+  }
+
   .tech-card {
     grid-template-columns: 1fr;
+    padding: 0.65rem;
   }
 
   .tech-photo {
-    height: 190px;
+    height: 180px;
+  }
+
+  .tech-meta h3 {
+    font-size: 1.2rem;
+  }
+
+  .tech-info {
+    gap: 0.45rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .tech-info span {
+    white-space: normal;
+  }
+
+  .tech-actions {
+    width: 100%;
+  }
+
+  .tech-actions .solid-btn,
+  .tech-actions .accent-btn {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  .contact-admin-card {
+    padding: 0.9rem;
+  }
+
+  .contact-admin-card .solid-btn {
+    width: 100%;
   }
 
   .admin-section {
@@ -695,7 +828,29 @@ table tbody tr:hover {
   }
 
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .payments-card table {
+    min-width: 420px;
+  }
+
+  .reports-card table {
+    min-width: 760px;
+  }
+
+  .report-modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .report-actions {
+    flex-direction: column;
+  }
+
+  .report-actions .outline-btn,
+  .report-actions .solid-btn {
+    width: 100%;
   }
 
   th,
@@ -707,5 +862,31 @@ table tbody tr:hover {
   .alert-list li {
     padding: 0.8rem;
     font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .lang-selector {
+    min-width: 112px;
+    font-size: 0.84rem;
+    padding: 0.45rem 0.55rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-chip {
+    flex-basis: 100%;
+  }
+
+  .site-footer {
+    gap: 0.8rem;
+    font-size: 0.92rem;
+  }
+
+  .modal-content {
+    width: 100%;
+    border-radius: 12px;
   }
 }

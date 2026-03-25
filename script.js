@@ -92,7 +92,7 @@ function renderTechnicians() {
         <img class="tech-photo" src="${item.image}" alt="${item.name} at work" loading="lazy">
         <div class="tech-meta">
           <h3>${item.name}${status}</h3>
-          <p><strong>${item.category}</strong> · Rating ${item.rating.toFixed(1)} ★ · ${item.jobsCompleted} ${getTrans("jobsCompleted")}</p>
+          <p><strong>${item.category}</strong> · Rating ${item.rating.toFixed(1)} <span class="rating-star">★</span> · ${item.jobsCompleted} ${getTrans("jobsCompleted")}</p>
           <div class="tech-info">
             <span>${getTrans("available")}: ${item.available}</span>
             <span>${getTrans("serves")}: ${item.serves}</span>
