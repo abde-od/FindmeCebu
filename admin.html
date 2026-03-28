@@ -67,6 +67,7 @@
               <h2 data-i18n="paymentManagement">Payment Management</h2>
               <p class="card-subtitle" data-i18n="trackTechPayments">Track technician payments</p>
             </div>
+            <p id="paymentsLoading" class="loading-note" data-i18n="loadingPayments" hidden>Loading payments...</p>
             <div class="table-wrap">
               <table class="admin-table payment-table">
                 <thead>
@@ -97,6 +98,7 @@
               <h2 data-i18n="reportsInbox">Reports and Comments Inbox</h2>
               <p class="card-subtitle" data-i18n="reportsInboxHint">Review user reports and update status.</p>
             </div>
+            <p id="reportsLoading" class="loading-note" data-i18n="loadingReports" hidden>Loading reports...</p>
             <div class="table-wrap">
               <table class="admin-table report-table">
                 <thead>
@@ -123,8 +125,13 @@
     <a href="index.html" data-i18n="backToHome">Back to Home</a>
   </footer>
 
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
   <script src="translations.js"></script>
   <script src="craftsmen.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="auth.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>

@@ -21,10 +21,13 @@ const reportTypeEl = document.getElementById("reportType");
 const reportTechIdEl = document.getElementById("reportTechId");
 const reportMessageEl = document.getElementById("reportMessage");
 const languageSelectorEl = document.getElementById("languageSelector");
+const techLoadingEl = document.getElementById("techLoading");
+const toastContainerEl = document.getElementById("toastContainer");
 
 let activeCategory = "All";
 let activeBarangay = "All";
 let searchTerm = "";
+let techRenderTimeoutId;
 
 function peso(amount) {
   return `PHP ${amount.toLocaleString()}`;
@@ -49,6 +52,24 @@ function getSavedReports() {
 
 function saveReports(items) {
   localStorage.setItem(REPORTS_STORAGE_KEY, JSON.stringify(items));
+}
+
+function setTechLoading(isLoading) {
+  if (!techLoadingEl) return;
+  techLoadingEl.hidden = !isLoading;
+}
+
+function showToast(message, type = "success") {
+  if (!toastContainerEl) return;
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  toastContainerEl.append(toast);
+
+  window.setTimeout(() => {
+    toast.remove();
+  }, 2200);
 }
 
 function getFilteredCraftsmen() {
@@ -110,12 +131,21 @@ function renderTechnicians() {
     .join("");
 
   if (!items.length) {
-    technicianListEl.innerHTML = `<article class="tech-card"><div class="tech-meta"><h3>${getTrans("noTechniciansFound")}</h3><p>${getTrans("tryAnotherSearch")}</p></div></article>`;
+    technicianListEl.innerHTML = `<article class="tech-card empty-state"><div class="tech-meta"><h3>${getTrans("noTechniciansFound")}</h3><p>${getTrans("tryAnotherSearch")}</p></div></article>`;
   }
 
   const count = items.length;
   const techLabel = count === 1 ? getTrans("technician") : getTrans("technicians");
   resultCountEl.textContent = `${count} ${techLabel} ${getTrans("shown")}`;
+}
+
+function queueTechnicianRender() {
+  window.clearTimeout(techRenderTimeoutId);
+  setTechLoading(true);
+  techRenderTimeoutId = window.setTimeout(() => {
+    renderTechnicians();
+    setTechLoading(false);
+  }, 120);
 }
 
 function setupFilters() {
@@ -126,17 +156,17 @@ function setupFilters() {
     document.querySelectorAll(".category-chip").forEach((chip) => {
       chip.classList.toggle("active", chip === button);
     });
-    renderTechnicians();
+    queueTechnicianRender();
   });
 
   searchInputEl.addEventListener("input", (event) => {
     searchTerm = event.target.value.trim();
-    renderTechnicians();
+    queueTechnicianRender();
   });
 
   barangayFilterEl.addEventListener("change", (event) => {
     activeBarangay = event.target.value;
-    renderTechnicians();
+    queueTechnicianRender();
   });
 }
 
@@ -197,6 +227,7 @@ function setupReportForm() {
     if (message.length < 10) {
       reportFeedbackEl.textContent = getTrans("reportTooShort");
       reportFeedbackEl.classList.add("error");
+      showToast(getTrans("reportTooShort"), "error");
       return;
     }
 
@@ -217,6 +248,7 @@ function setupReportForm() {
     reportFormEl.reset();
     reportFeedbackEl.textContent = getTrans("reportSuccess");
     reportFeedbackEl.classList.remove("error");
+    showToast(getTrans("reportSuccess"), "success");
 
     setTimeout(() => {
       closeReportModal();
@@ -232,7 +264,7 @@ function setupLanguageRefresh() {
     setTimeout(() => {
       renderBarangayOptions();
       renderReportTechnicianOptions();
-      renderTechnicians();
+      queueTechnicianRender();
     }, 0);
   });
 }
@@ -254,7 +286,7 @@ function setupSmoothScrollOffset() {
 
 renderBarangayOptions();
 renderReportTechnicianOptions();
-renderTechnicians();
+queueTechnicianRender();
 setupFilters();
 setupActions();
 setupReportForm();

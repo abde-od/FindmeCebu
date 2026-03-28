@@ -19,7 +19,7 @@
       <a href="#home" data-i18n="home">Home</a>
       <a href="#services" data-i18n="services">Services</a>
       <a href="#technicians" data-i18n="technicians">Technicians</a>
-      <a href="admin.html" data-i18n="admin">Admin</a>
+      <a href="login.html" data-i18n="admin">Admin</a>
     </nav>
     <div class="header-controls">
       <select id="languageSelector" class="lang-selector" aria-label="Select language">
@@ -61,6 +61,7 @@
         <h2 data-i18n="featuredTechnicians">Featured Technicians</h2>
         <p id="resultCount" class="result-count"></p>
       </div>
+      <p id="techLoading" class="loading-note" data-i18n="loadingTechnicians" hidden>Loading technicians...</p>
       <div id="technicianList" class="technician-list"></div>
 
       <article class="contact-admin-card">
@@ -75,7 +76,7 @@
     <a href="#home" data-i18n="quickLinks">Quick links</a>
     <a href="#services" data-i18n="services">Categories</a>
     <a href="#technicians" data-i18n="howItWorks">How it Works</a>
-    <a href="admin.html" data-i18n="admin">Admin</a>
+    <a href="login.html" data-i18n="admin">Admin</a>
   </footer>
 
   <div id="phoneModal" class="modal" aria-hidden="true" role="dialog" aria-label="Technician phone number">
@@ -125,6 +126,8 @@
       </form>
     </div>
   </div>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
   <script src="translations.js"></script>
   <script src="craftsmen.js"></script>

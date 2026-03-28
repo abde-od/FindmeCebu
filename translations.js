@@ -97,6 +97,10 @@ const translations = {
     statusNew: "New",
     statusInReview: "In Review",
     statusResolved: "Resolved",
+    statusUpdated: "Status updated successfully.",
+    loadingTechnicians: "Loading technicians...",
+    loadingPayments: "Loading payments...",
+    loadingReports: "Loading reports...",
 
     // Badges
     verified: "VERIFIED",
@@ -202,6 +206,10 @@ const translations = {
     statusNew: "Bago",
     statusInReview: "Sinusuri",
     statusResolved: "Naresolba",
+    statusUpdated: "Matagumpay na na-update ang status.",
+    loadingTechnicians: "Nilo-load ang technicians...",
+    loadingPayments: "Nilo-load ang payments...",
+    loadingReports: "Nilo-load ang reports...",
 
     // Badges
     verified: "VERIFIED",

@@ -1,7 +1,4 @@
-﻿const ADMIN_SESSION_KEY = "shc_admin_auth";
-const ADMIN_PASSWORD = "abde&philipin2003";
-
-const totalTechsEl = document.getElementById("totalTechs");
+﻿const totalTechsEl = document.getElementById("totalTechs");
 const totalCallsEl = document.getElementById("totalCalls");
 const verifiedTechsEl = document.getElementById("verifiedTechs");
 const totalRevenueEl = document.getElementById("totalRevenue");
@@ -11,8 +8,13 @@ const logoutBtn = document.getElementById("logoutBtn");
 const languageSelectorEl = document.getElementById("languageSelector");
 const reportRowsEl = document.getElementById("reportRows");
 const reportsEmptyEl = document.getElementById("reportsEmpty");
+const paymentsLoadingEl = document.getElementById("paymentsLoading");
+const reportsLoadingEl = document.getElementById("reportsLoading");
+const toastContainerEl = document.getElementById("toastContainer");
 
 const REPORTS_STORAGE_KEY = "shc_reports";
+let adminRenderTimeoutId;
+let reportsRenderTimeoutId;
 
 function peso(amount) {
   return `PHP ${amount.toLocaleString()}`;
@@ -37,6 +39,31 @@ function getSavedReports() {
 
 function saveReports(items) {
   localStorage.setItem(REPORTS_STORAGE_KEY, JSON.stringify(items));
+}
+
+function showToast(message, type = "success") {
+  if (!toastContainerEl) return;
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  toastContainerEl.append(toast);
+
+  window.setTimeout(() => {
+    toast.remove();
+  }, 2200);
+}
+
+function setAdminLoading(isLoading) {
+  if (paymentsLoadingEl) {
+    paymentsLoadingEl.hidden = !isLoading;
+  }
+}
+
+function setReportsLoading(isLoading) {
+  if (reportsLoadingEl) {
+    reportsLoadingEl.hidden = !isLoading;
+  }
 }
 
 function formatDateTime(isoDate) {
@@ -83,21 +110,6 @@ function escapeHtml(text) {
     .replaceAll("'", "&#39;");
 }
 
-function requireAdminAccess() {
-  const hasSession = localStorage.getItem(ADMIN_SESSION_KEY) === "true";
-  if (hasSession) return true;
-
-  const input = window.prompt("Admin access only. Enter admin password:");
-  if (input === ADMIN_PASSWORD) {
-    localStorage.setItem(ADMIN_SESSION_KEY, "true");
-    return true;
-  }
-
-  window.alert("Access denied. Redirecting to customer page.");
-  window.location.href = "index.html";
-  return false;
-}
-
 function renderAdmin() {
   const verifiedCount = craftsmanList.filter((item) => item.verified).length;
   const totalCalls = craftsmanList.reduce((sum, item) => sum + item.callsHandled, 0);
@@ -110,7 +122,8 @@ function renderAdmin() {
   verifiedTechsEl.textContent = String(verifiedCount);
   totalRevenueEl.textContent = peso(revenue);
 
-  paymentRowsEl.innerHTML = craftsmanList
+  paymentRowsEl.innerHTML = craftsmanList.length
+    ? craftsmanList
     .map(
       (item) => `
       <tr>
@@ -120,7 +133,8 @@ function renderAdmin() {
       </tr>
     `
     )
-    .join("");
+    .join("")
+    : `<tr><td colspan="3" class="empty-state">${getTrans("noTechniciansFound")}</td></tr>`;
 
   const pendingTech = craftsmanList.find((item) => !item.verified)?.name || getTrans("noRegistrations");
   const paidTech = craftsmanList.find((item) => item.paymentStatus === "PAID")?.name || getTrans("noPaymentUpdates");
@@ -161,6 +175,24 @@ function renderReportsInbox() {
     .join("");
 }
 
+function queueAdminRender() {
+  window.clearTimeout(adminRenderTimeoutId);
+  setAdminLoading(true);
+  adminRenderTimeoutId = window.setTimeout(() => {
+    renderAdmin();
+    setAdminLoading(false);
+  }, 120);
+}
+
+function queueReportsRender() {
+  window.clearTimeout(reportsRenderTimeoutId);
+  setReportsLoading(true);
+  reportsRenderTimeoutId = window.setTimeout(() => {
+    renderReportsInbox();
+    setReportsLoading(false);
+  }, 120);
+}
+
 function setupReportsActions() {
   reportRowsEl.addEventListener("change", (event) => {
     const select = event.target.closest("select[data-report-id]");
@@ -172,14 +204,19 @@ function setupReportsActions() {
 
     reports[index].status = select.value;
     saveReports(reports);
-    renderReportsInbox();
+    queueReportsRender();
+    showToast(getTrans("statusUpdated"), "success");
   });
 }
 
 function setupLogout() {
-  logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem(ADMIN_SESSION_KEY);
-    window.location.href = "index.html";
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      await window.Auth.signOut();
+    } catch {
+      // no-op
+    }
+    window.location.href = "login.html";
   });
 }
 
@@ -188,16 +225,31 @@ function setupLanguageRefresh() {
 
   languageSelectorEl.addEventListener("change", () => {
     setTimeout(() => {
-      renderAdmin();
-      renderReportsInbox();
+      queueAdminRender();
+      queueReportsRender();
     }, 0);
   });
 }
 
-if (requireAdminAccess()) {
-  renderAdmin();
-  renderReportsInbox();
+async function bootstrapAdmin() {
+  if (!window.Auth || !window.Auth.isConfigured()) {
+    reportsEmptyEl.style.display = "block";
+    reportsEmptyEl.textContent = "Auth is not configured. Set Supabase values in supabase-config.js.";
+    return;
+  }
+
+  const access = await window.Auth.requireAdminSession({
+    redirectTo: "login.html",
+    noAccessRedirect: "index.html"
+  });
+
+  if (!access.allowed) return;
+
+  queueAdminRender();
+  queueReportsRender();
   setupLogout();
   setupReportsActions();
   setupLanguageRefresh();
 }
+
+bootstrapAdmin();
